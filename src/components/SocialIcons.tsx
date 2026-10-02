@@ -58,19 +58,19 @@ const SOCIAL_LINKS: SocialLinkItem[] = [
   {
     id: 'github',
     name: 'GitHub',
-    url: 'https://github.com/worklabs05/doc-engine',
+    url: 'https://github.com/junaidmirr/doc-engine.git',
     icon: <GithubIcon size={14} />,
   },
   {
     id: 'x',
     name: 'X',
-    url: 'https://x.com',
+    url: 'https://x.com/docengine_',
     icon: <XIcon size={13} />,
   },
   {
     id: 'reddit',
     name: 'Reddit',
-    url: 'https://reddit.com',
+    url: 'https://www.reddit.com/user/Strong_Aardvark_7868/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button',
     icon: <RedditIcon size={14} />,
   },
 ];
