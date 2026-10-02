@@ -9,6 +9,7 @@ import { PaginationShowcase } from './components/PaginationShowcase';
 import { StudioShowcase } from './components/StudioShowcase';
 import { RendererBenchmarkShowcase } from './components/RendererBenchmarkShowcase';
 import { CoreEngineShowcase } from './components/CoreEngineShowcase';
+import { SocialButtons } from './components/SocialIcons';
 import logoImg from './assets/logo.png';
 import './App.css';
 
@@ -50,6 +51,12 @@ export function AppContent() {
             <span className="footer-sep">/</span>
             <span>client-side vector document compiler</span>
           </div>
+
+          <div className="footer-socials-wrapper">
+            <span className="footer-socials-label">Socials:</span>
+            <SocialButtons className="footer-socials" />
+          </div>
+
           <div className="footer-stats">
             <span>canvas 2d</span>
             <span className="footer-dot">•</span>

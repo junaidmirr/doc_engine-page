@@ -20,6 +20,7 @@ import {
   AlignLeft,
 } from 'lucide-react';
 import type { TabKey } from './Navbar';
+import { SocialButtons } from './SocialIcons';
 import logoImg from '../assets/logo.png';
 
 interface DocumentationShowcaseProps {
@@ -76,6 +77,7 @@ const NAV_CATEGORIES = [
     items: [
       { id: 'comparison-matrix', label: 'Architecture Comparison' },
       { id: 'core-api-ref', label: 'Core Engine API' },
+      { id: 'community-socials', label: 'Community & Socials' },
     ],
   },
 ];
@@ -1123,6 +1125,20 @@ const { document, updateElement, addElement, undo, redo, canUndo, canRedo } = us
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </section>
+
+          {/* Community & Socials Section */}
+          <section id="community-socials" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Community & Socials</h2>
+              <span className="docs-meta-tag">Open Source</span>
+            </div>
+            <p>
+              Connect with fellow developers, explore source code, report issues, and stay updated across our official channels:
+            </p>
+            <div style={{ marginTop: '16px' }}>
+              <SocialButtons className="docs-socials-group" />
             </div>
           </section>
         </main>

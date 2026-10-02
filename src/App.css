@@ -137,6 +137,76 @@
   border-color: var(--border-strong);
 }
 
+/* Social Buttons */
+.social-buttons-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.social-btn {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 5px 9px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  line-height: 1;
+  transition: border-color 0.1s ease, background-color 0.1s ease, color 0.1s ease;
+  user-select: none;
+}
+
+.social-btn:hover {
+  background: var(--surface-subtle);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.social-label {
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.footer-socials-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-socials-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.docs-socials-group .social-btn {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .header-socials .social-label {
+    display: none;
+  }
+  .header-socials .social-btn {
+    padding: 5px 7px;
+  }
+}
+
 /* Tab Navigation */
 .tab-navigation {
   display: flex;

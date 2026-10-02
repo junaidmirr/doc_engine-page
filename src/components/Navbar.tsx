@@ -12,6 +12,7 @@ import {
   Moon,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { SocialButtons } from './SocialIcons';
 import logoImg from '../assets/logo.png';
 
 export type TabKey =
@@ -65,6 +66,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
             <span className="status-dot"></span>
             PDF 1.7 / Canvas 2D
           </span>
+
+          <SocialButtons className="header-socials" />
 
           <button
             type="button"
