@@ -13,6 +13,8 @@ import {
 import type { PageSizeName, PageOrientation } from '@worklabs05/doc-engine';
 import { Download } from 'lucide-react';
 
+import { compileReactDocument } from '../utils/extractReactDoc';
+
 export const ReactJSXShowcase: React.FC = () => {
   const [pageSize, setPageSize] = useState<PageSizeName>('letter');
   const [orientation, setOrientation] = useState<PageOrientation>('portrait');
@@ -33,7 +35,7 @@ export const ReactJSXShowcase: React.FC = () => {
             x={40}
             y={35}
             width={532}
-            height={80}
+            height={86}
             backgroundColor="#18181b"
             borderRadius={4}
             padding={16}
@@ -42,7 +44,7 @@ export const ReactJSXShowcase: React.FC = () => {
             gap={6}
           >
             <Text
-              fontSize={20}
+              fontSize={18}
               fontWeight="bold"
               fontFamily={fontFamily}
               color="#ffffff"
@@ -51,7 +53,7 @@ export const ReactJSXShowcase: React.FC = () => {
               {headerTitle}
             </Text>
             <Text
-              fontSize={10}
+              fontSize={9.5}
               fontFamily={fontFamily}
               color="#a1a1aa"
               letterSpacing={1.2}
@@ -65,9 +67,9 @@ export const ReactJSXShowcase: React.FC = () => {
           {/* Section Heading & Geometry Primitive */}
           <View
             x={40}
-            y={130}
+            y={136}
             width={532}
-            height={32}
+            height={30}
             layout="flex"
             flexDirection="row"
             gap={12}
@@ -80,7 +82,7 @@ export const ReactJSXShowcase: React.FC = () => {
               fillColor={accentColor}
             />
             <Text
-              width={480}
+              width={490}
               fontSize={12}
               fontWeight="bold"
               fontFamily={fontFamily}
@@ -90,12 +92,12 @@ export const ReactJSXShowcase: React.FC = () => {
             </Text>
           </View>
 
-          {/* Divider Line Primitive */}
+          {/* Divider Line Primitive with ample spacing */}
           <Line
             x={40}
-            y={170}
+            y={176}
             x2={572}
-            y2={170}
+            y2={176}
             strokeColor="#e4e4e7"
             strokeWidth={1}
           />
@@ -103,7 +105,7 @@ export const ReactJSXShowcase: React.FC = () => {
           {/* Body Paragraph with Typography Controls */}
           <Text
             x={40}
-            y={182}
+            y={188}
             width={532}
             fontSize={11}
             fontFamily={fontFamily}
@@ -111,25 +113,20 @@ export const ReactJSXShowcase: React.FC = () => {
             color="#3f3f46"
             align="justify"
           >
-            This document demonstrates the full suite of declarative React JSX components provided by{' '}
-            <strong style={{ fontWeight: 'bold' }}>doc-engine/react</strong>. The entire document tree
-            is composed using standard React primitives (&lt;Document&gt;, &lt;Page&gt;, &lt;View&gt;,
-            &lt;Text&gt;, &lt;Shape&gt;, &lt;Table&gt;, and &lt;Grid&gt;). The rendering pipeline
-            compiles this JSX hierarchy directly into real vector PDF streams with native fonts, vector
-            polygons, and zero screenshot rasterization.
+            This document demonstrates the full suite of declarative React JSX components provided by doc-engine/react. The entire document tree is composed using standard React primitives (&lt;Document&gt;, &lt;Page&gt;, &lt;View&gt;, &lt;Text&gt;, &lt;Shape&gt;, &lt;Table&gt;, and &lt;Grid&gt;). The rendering pipeline compiles this JSX hierarchy directly into real vector PDF streams with native fonts, vector polygons, and zero screenshot rasterization.
           </Text>
 
           {/* 2D Metric Cards Grid */}
           <Grid
             x={40}
-            y={255}
+            y={258}
             width={532}
-            height={65}
+            height={62}
             columns={3}
             gap={12}
           >
             <View
-              width={168}
+              width={169}
               height={60}
               backgroundColor="#fafafa"
               borderColor="#e4e4e7"
@@ -142,7 +139,7 @@ export const ReactJSXShowcase: React.FC = () => {
             </View>
 
             <View
-              width={168}
+              width={169}
               height={60}
               backgroundColor="#fafafa"
               borderColor="#e4e4e7"
@@ -155,7 +152,7 @@ export const ReactJSXShowcase: React.FC = () => {
             </View>
 
             <View
-              width={168}
+              width={169}
               height={60}
               backgroundColor="#fafafa"
               borderColor="#e4e4e7"
@@ -171,9 +168,9 @@ export const ReactJSXShowcase: React.FC = () => {
           {/* Itemized Table Primitive with Zebra Striping */}
           <Table
             x={40}
-            y={338}
+            y={336}
             width={532}
-            columns={['2.6fr', '1.3fr', '1.1fr']}
+            columns={['2.3fr', '1.7fr', '1.0fr']}
             zebra={enableZebra}
             zebraColor="#fafafa"
             borderWidth={1}
@@ -236,8 +233,11 @@ export const ReactJSXShowcase: React.FC = () => {
     [pageSize, orientation, accentColor, fontFamily, enableZebra, headerTitle, badgeText, lineHeight]
   );
 
+  // Compile React JSX tree into full DocumentDefinition AST
+  const compiledDocument = useMemo(() => compileReactDocument(myDocument), [myDocument]);
+
   // Hook to automatically compile the vector PDF
-  const { dataUrl, loading, download } = usePDF(myDocument);
+  const { dataUrl, loading, download } = usePDF(compiledDocument);
 
   return (
     <div className="showcase-section">
