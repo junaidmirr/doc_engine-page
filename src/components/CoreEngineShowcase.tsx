@@ -5,7 +5,7 @@ import {
   measureTextWidth,
   wrapText,
   toPdfCoordinates,
-} from 'doc-engine';
+} from '@worklabs05/doc-engine';
 import { Download } from 'lucide-react';
 
 export const CoreEngineShowcase: React.FC = () => {
@@ -267,7 +267,7 @@ export const CoreEngineShowcase: React.FC = () => {
 
           <div className="code-snippet-box" style={{ margin: 0, borderBottom: '1px solid var(--border)' }}>
             <pre className="code-snippet-content">
-{`import { createDocument, PdfRenderer } from 'doc-engine';
+{`import { createDocument, PdfRenderer } from '@worklabs05/doc-engine';
 
 const doc = createDocument({ defaultPageSize: 'letter', coordinateOrigin: 'top-left' });
 doc.addShape({ shapeType: 'rectangle', x: 40, y: 40, width: 532, height: 65, fillColor: '#0f172a' });

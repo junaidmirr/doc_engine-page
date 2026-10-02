@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Document, Page, View, Text, Line, usePDF, DocumentViewer } from 'doc-engine/react';
+import { Document, Page, View, Text, Line, usePDF, DocumentViewer } from '@worklabs05/doc-engine/react';
 import { Download, Eye, FileText } from 'lucide-react';
 
 export const PaginationShowcase: React.FC = () => {

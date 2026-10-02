@@ -9,8 +9,8 @@ import {
   Table,
   Grid,
   usePDF,
-} from 'doc-engine/react';
-import type { PageSizeName, PageOrientation } from 'doc-engine';
+} from '@worklabs05/doc-engine/react';
+import type { PageSizeName, PageOrientation } from '@worklabs05/doc-engine';
 import { Download } from 'lucide-react';
 
 export const ReactJSXShowcase: React.FC = () => {

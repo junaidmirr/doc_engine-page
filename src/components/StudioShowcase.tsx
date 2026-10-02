@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useDocument, DocumentViewer } from 'doc-engine/react';
-import type { DocumentDefinition } from 'doc-engine';
+import { useDocument, DocumentViewer } from '@worklabs05/doc-engine/react';
+import type { DocumentDefinition } from '@worklabs05/doc-engine';
 import { Type, Square, Circle, Trash2, Undo2, Redo2, Download, Check } from 'lucide-react';
 
 export const StudioShowcase: React.FC = () => {

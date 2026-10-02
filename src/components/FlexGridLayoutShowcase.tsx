@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Document, Page, View, Text, Shape, usePDF } from 'doc-engine/react';
+import { Document, Page, View, Text, Shape, usePDF } from '@worklabs05/doc-engine/react';
 import { Download, Rows, Columns } from 'lucide-react';
 
 export const FlexGridLayoutShowcase: React.FC = () => {

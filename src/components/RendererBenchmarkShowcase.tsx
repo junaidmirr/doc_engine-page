@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { PdfRenderer, CanvasRenderer, SvgRenderer, type DocumentDefinition } from 'doc-engine';
+import { PdfRenderer, CanvasRenderer, SvgRenderer, type DocumentDefinition } from '@worklabs05/doc-engine';
 import { Download, Eye, FileDown, FileText, Code, HardDrive } from 'lucide-react';
 
 export const RendererBenchmarkShowcase: React.FC = () => {

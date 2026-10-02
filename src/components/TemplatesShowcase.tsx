@@ -4,8 +4,8 @@ import {
   createCertificateDocument,
   createBusinessReportDocument,
   createResumeDocument,
-} from 'doc-engine/examples';
-import { DocumentViewer, usePDF } from 'doc-engine/react';
+} from '@worklabs05/doc-engine/examples';
+import { DocumentViewer, usePDF } from '@worklabs05/doc-engine/react';
 import {
   Receipt,
   Award,

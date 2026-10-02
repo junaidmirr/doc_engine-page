@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, View, Text, Shape, usePDF } from 'doc-engine/react';
+import { Document, Page, View, Text, Shape, usePDF } from '@worklabs05/doc-engine/react';
 
 export function InvoicePage() {
   // 1. Define your document tree using JSX
