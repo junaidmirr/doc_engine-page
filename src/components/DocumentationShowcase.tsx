@@ -18,6 +18,8 @@ import {
   Compass,
   FileCode,
   AlignLeft,
+  ListFilter,
+  ChevronDown,
 } from 'lucide-react';
 import type { TabKey } from './Navbar';
 import { SocialButtons } from './SocialIcons';
@@ -86,6 +88,7 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedSnippet, setCopiedSnippet] = useState<string | null>(null);
   const [packageManager, setPackageManager] = useState<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -125,6 +128,7 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
   }, [searchQuery]);
 
   const scrollToSection = (id: string) => {
+    setIsMobileMenuOpen(false);
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -236,8 +240,29 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
 
       {/* Main 2-Column Documentation Layout */}
       <div className="docs-layout-grid">
+        {/* Mobile Navigation Toggle Bar */}
+        <div className="docs-mobile-toc-bar">
+          <button
+            type="button"
+            className="docs-mobile-toc-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
+          >
+            <ListFilter size={14} />
+            <span>Table of Contents</span>
+            <ChevronDown
+              size={14}
+              style={{
+                transform: isMobileMenuOpen ? 'rotate(180deg)' : 'none',
+                transition: 'transform 0.15s ease',
+                marginLeft: 'auto',
+              }}
+            />
+          </button>
+        </div>
+
         {/* Sticky Sidebar */}
-        <aside className="docs-sidebar">
+        <aside className={`docs-sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
           <div className="docs-search-container">
             <Search size={13} className="docs-search-icon" />
             <input

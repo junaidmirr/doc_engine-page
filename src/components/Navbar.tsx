@@ -77,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
             aria-label={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} theme`}
           >
             {theme === 'light' ? <Moon size={13} /> : <Sun size={13} />}
-            <span>{theme === 'light' ? 'Dark' : 'Light'}</span>
+            <span className="btn-label">{theme === 'light' ? 'Dark' : 'Light'}</span>
           </button>
 
           <button
@@ -85,9 +85,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
             className={`docs-button ${activeTab === 'docs' ? 'active-docs-btn' : ''}`}
             onClick={() => onSelectTab('docs')}
             title="Read Complete Documentation & Guides"
+            aria-label="Read Complete Documentation & Guides"
           >
-            <BookOpen size={13} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-            Documentation
+            <BookOpen size={13} />
+            <span className="btn-label">Docs</span>
           </button>
         </div>
       </div>
