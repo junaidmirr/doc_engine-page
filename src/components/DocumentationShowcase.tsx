@@ -248,16 +248,22 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
           >
-            <ListFilter size={14} />
-            <span>Table of Contents</span>
-            <ChevronDown
-              size={14}
-              style={{
-                transform: isMobileMenuOpen ? 'rotate(180deg)' : 'none',
-                transition: 'transform 0.15s ease',
-                marginLeft: 'auto',
-              }}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ListFilter size={14} />
+              <span>Table of Contents</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                {isMobileMenuOpen ? 'Hide' : 'Show'}
+              </span>
+              <ChevronDown
+                size={14}
+                style={{
+                  transform: isMobileMenuOpen ? 'rotate(180deg)' : 'none',
+                  transition: 'transform 0.15s ease',
+                }}
+              />
+            </div>
           </button>
         </div>
 

@@ -1085,8 +1085,9 @@ input[type="color"] {
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  padding: 9px 12px;
+  padding: 10px 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -1103,34 +1104,7 @@ input[type="color"] {
   border-color: var(--border-strong);
 }
 
-@media (max-width: 960px) {
-  .docs-layout-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .docs-mobile-toc-bar {
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  .docs-sidebar {
-    display: none;
-    position: static;
-    max-height: 420px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 14px;
-    margin-bottom: 12px;
-  }
-
-  .docs-sidebar.mobile-open {
-    display: flex !important;
-  }
-}
-
-/* Sticky Documentation Sidebar */
+/* Sticky Documentation Sidebar (Desktop Base) */
 .docs-sidebar {
   position: sticky;
   top: 72px;
@@ -1141,6 +1115,39 @@ input[type="color"] {
   gap: 14px;
   padding-right: 8px;
   scrollbar-width: thin;
+}
+
+/* Mobile & Tablet Documentation Layout (<= 960px) */
+@media (max-width: 960px) {
+  .docs-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .docs-mobile-toc-bar {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Table of Contents is strictly collapsed by default on mobile so docs are visible */
+  .docs-sidebar {
+    display: none !important;
+    position: static !important;
+    top: auto !important;
+    max-height: 50vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 16px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  /* Table of Contents expands only when mobile menu is toggled open */
+  .docs-sidebar.mobile-open {
+    display: flex !important;
+  }
 }
 
 .docs-search-container {
