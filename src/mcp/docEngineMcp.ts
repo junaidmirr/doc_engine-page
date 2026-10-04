@@ -110,9 +110,86 @@ export const MCP_TOOLS: McpToolDefinition[] = [
       required: ['templateName'],
     },
   },
+  {
+    name: 'doc_engine_get_custom_doc_guide',
+    description: 'Get the complete 6-step blueprint to build any custom document design end-to-end with page setup, flow stacks, vector cards, typography, tables, and renderers.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'doc_engine_get_primitive_specs',
+    description: 'Get complete primitive element specifications (Text, Stack, Table, View, Grid, Shape, Image) with properties, signatures, and use cases.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
 ];
 
 export const DOCS_SECTIONS_DATA: Record<string, { title: string; category: string; content: string; code?: string }> = {
+  'build-your-own': {
+    title: 'Build Any Custom Document (End-to-End Guide)',
+    category: 'End-to-End Design',
+    content: 'doc-engine gives you 100% design freedom. 6-step blueprint to build any custom document: Step 1: Initialize Page Canvas & Dimensions, Step 2: Structure Page Layout with Flow Stacks, Step 3: Add Vector Headers, Banners & Cards, Step 4: Format Typography & Multiline Text, Step 5: Embed Itemized Data Tables, Step 6: Export Vector PDF or Render 60 FPS Canvas.',
+    code: `import { createDocument, PdfRenderer } from '@worklabs05/doc-engine';
+
+// Step 1: Initialize Page Canvas & Dimensions
+const doc = createDocument({
+  defaultPageSize: 'a4',        // 'letter' | 'a4' | 'legal' | { width, height }
+  orientation: 'portrait',      // 'portrait' | 'landscape'
+  coordinateOrigin: 'top-left', // Web Top-Left (0,0)
+});
+
+// Step 2: Structure Page Layout with Flow Stacks
+doc.addStack({ x: 40, y: 40, width: 515, gap: 16 }, (stack) => {
+  // Step 3: Add Vector Headers, Banners & Cards
+  stack.addShape({
+    shapeType: 'rectangle',
+    height: 50,
+    fillColor: '#0f172a',
+    borderRadius: 6,
+  });
+
+  // Step 4: Format Typography & Multiline Text
+  stack.addText({
+    text: 'OFFICIAL DOCUMENT SPECIFICATION',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  });
+
+  // Step 5: Embed Itemized Data Tables
+  stack.addTable({
+    columns: [
+      { header: 'Item Specs', width: '3fr', align: 'left' },
+      { header: 'Qty', width: 60, align: 'center' },
+      { header: 'Unit Price', width: 90, align: 'right' },
+    ],
+    rows: [
+      { cells: [{ content: 'High Performance Vector Pipeline' }, { content: '1' }, { content: '$5,000.00' }] },
+    ],
+    zebra: true,
+  });
+});
+
+// Step 6: Export Vector PDF
+const pdfBytes = await PdfRenderer.renderToBytes(doc.toDefinition());`,
+  },
+  'primitives-cheatsheet': {
+    title: 'Complete Primitive Element Specs',
+    category: 'End-to-End Design',
+    content: 'Comprehensive primitive element specs: Text (titles, body, callouts), Stack (flow stacking without manual Y math), Table (fractional 3fr, zebra, auto-wrapping), View (card containers, background banners), Grid (2D KPI metric cards), Shape (rectangles, circles, lines), Image (logos, photos, seals).',
+    code: `// Complete Primitives Usage Cheatsheet
+stack.addText({ text: 'Title', fontSize: 14, fontWeight: 'bold' });
+doc.addStack({ direction: 'column', gap: 12 }, (s) => { ... });
+stack.addTable({ columns: [{ header: 'Name', width: '2fr' }], rows: [...] });
+stack.addView({ backgroundColor: '#f8fafc', padding: 12, borderRadius: 4 }, (v) => { ... });
+stack.addGrid({ columns: 3, gap: 10 }, (g) => { ... });
+stack.addShape({ shapeType: 'rectangle', fillColor: '#0284c7' });
+stack.addImage({ src: logoBuffer, width: 100, height: 40, fit: 'contain' });`,
+  },
   'introduction': {
     title: 'Introduction & Core Philosophy',
     category: 'Overview',
@@ -399,6 +476,97 @@ export class DocEngineWebMcpServer {
           },
         };
       }
+
+      case 'doc_engine_get_custom_doc_guide':
+        return {
+          title: 'Build Any Custom Document (End-to-End Guide)',
+          overview: 'doc-engine provides 100% design freedom. Use this 6-step blueprint to build any custom document type (invoices, certificates, business reports, resumes, purchase orders, shipping labels).',
+          steps: [
+            {
+              step: 1,
+              title: 'Initialize Page Canvas & Dimensions',
+              description: "Choose preset page sizes ('letter', 'a4', 'legal', 'a3') or custom point dimensions and orientation.",
+              code: "const doc = createDocument({ defaultPageSize: 'a4', orientation: 'landscape', coordinateOrigin: 'top-left' });",
+            },
+            {
+              step: 2,
+              title: 'Structure Page Layout with Flow Stacks',
+              description: 'Use doc.addStack() to stack views and text vertically without measuring line heights or calculating Y coordinates.',
+              code: 'doc.addStack({ x: 40, y: 40, width: 762, gap: 20 }, (stack) => { ... });',
+            },
+            {
+              step: 3,
+              title: 'Add Vector Headers, Banners & Cards',
+              description: 'Draw background shapes, cards, or brand ribbons with addShape() or addView().',
+              code: "stack.addShape({ shapeType: 'rectangle', height: 60, fillColor: '#0f172a', borderRadius: 8 });",
+            },
+            {
+              step: 4,
+              title: 'Format Typography & Multiline Text',
+              description: 'Render titles, body paragraphs, and AFM measured multiline text with addText().',
+              code: "stack.addText({ text: 'OFFICIAL DOCUMENT', fontSize: 22, fontWeight: 'bold', color: '#ffffff' });",
+            },
+            {
+              step: 5,
+              title: 'Embed Itemized Data Tables',
+              description: 'Embed auto-wrapping tables with fractional widths ("3fr"), zebra striping, and cell alignment.',
+              code: "stack.addTable({ columns: [{ header: 'Item Specs', width: '3fr', align: 'left' }, { header: 'Qty', width: 60 }], rows, zebra: true });",
+            },
+            {
+              step: 6,
+              title: 'Export Vector PDF or Render 60 FPS Canvas',
+              description: 'Compile AST into ISO 32000-1 binary vector PDF bytes or render directly into React DocumentViewer.',
+              code: 'const pdfBytes = await PdfRenderer.renderToBytes(doc.toDefinition()); // Or <DocumentViewer document={doc} enableTextSelection={true} />',
+            },
+          ],
+          runnableBlueprint: DOCS_SECTIONS_DATA['build-your-own'].code,
+        };
+
+      case 'doc_engine_get_primitive_specs':
+        return [
+          {
+            primitive: 'Text',
+            method: 'stack.addText() / <Text>',
+            keyProps: 'text, fontSize, fontWeight, align, color, lineHeight, maxLines',
+            useCases: 'Titles, body paragraphs, callout numbers, currency figures.',
+          },
+          {
+            primitive: 'Stack',
+            method: 'doc.addStack()',
+            keyProps: "direction ('column'|'row'), gap, x, y, width",
+            useCases: 'Auto-calculating vertical or horizontal flow stacks without y math.',
+          },
+          {
+            primitive: 'Table',
+            method: 'stack.addTable() / <Table>',
+            keyProps: 'columns (TableColumnConfig[]), rows, zebra, cellPadding, borderWidth',
+            useCases: 'Itemized invoices, financial tables, expense logs, schedule manifests.',
+          },
+          {
+            primitive: 'View',
+            method: 'stack.addView() / <View>',
+            keyProps: 'backgroundColor, borderColor, borderRadius, padding, layout',
+            useCases: 'Card containers, colored header banners, sidebars, badge boxes.',
+          },
+          {
+            primitive: 'Grid',
+            method: 'stack.addGrid() / <Grid>',
+            keyProps: 'columns (number), gap, children',
+            useCases: '2D KPI metric cards, product photo grids, 2-column resume sections.',
+          },
+          {
+            primitive: 'Shape',
+            method: 'stack.addShape() / <Shape>',
+            keyProps: "shapeType ('rectangle'|'circle'|'line'|'path'), fillColor, strokeColor",
+            useCases: 'Divider lines, circular avatars, background ribbons, custom vector icons.',
+          },
+          {
+            primitive: 'Image',
+            method: 'stack.addImage() / <Image>',
+            keyProps: "src (URL|Uint8Array), fit ('contain'|'cover'|'fill'), borderRadius",
+            useCases: 'Company logos, user profile photos, product thumbnails, seals.',
+          },
+        ];
 
       default:
         throw new Error(`Unknown tool name: ${name}`);

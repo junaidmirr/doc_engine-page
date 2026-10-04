@@ -31,6 +31,13 @@ interface DocumentationShowcaseProps {
 
 const NAV_CATEGORIES = [
   {
+    category: 'End-to-End Design',
+    items: [
+      { id: 'build-your-own', label: 'Build Any Document' },
+      { id: 'primitives-cheatsheet', label: 'Primitive Element Specs' },
+    ],
+  },
+  {
     category: 'Overview',
     items: [
       { id: 'introduction', label: 'Introduction' },
@@ -319,6 +326,206 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
 
         {/* Main Documentation Articles */}
         <main className="docs-article-content">
+          {/* End-to-End Design: Build Any Custom Document */}
+          <section id="build-your-own" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Build Any Custom Document</h2>
+              <span className="docs-meta-tag">End-to-End Guide</span>
+            </div>
+            <p>
+              <strong>doc-engine</strong> is not restricted to rigid or predefined templates. It provides a
+              headless, fully-declarative layout canvas where you have complete design freedom to build
+              any document type — multi-page corporate financial reports, landscape award certificates, itemized
+              invoices, shipping bills of lading, and programmatic AI-generated PDFs.
+            </p>
+
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginTop: '20px', color: 'var(--text-primary)' }}>
+              6-Step Blueprint to Design Any Document
+            </h3>
+
+            <div className="step-box">
+              <span className="step-number">STEP 1</span>
+              <h3>Initialize Page Canvas & Dimensions</h3>
+              <p>
+                Choose standard presets (<code>'letter'</code>, <code>'a4'</code>, <code>'legal'</code>, <code>'a3'</code>) or specify custom width × height dimensions and orientation:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 1: Canvas Dimensions</div>
+                <pre className="code-snippet-content">
+{`const doc = createDocument({
+  defaultPageSize: 'a4',        // 'letter' | 'a4' | 'legal' | { width: 400, height: 600 }
+  orientation: 'landscape',     // 'portrait' | 'landscape'
+  coordinateOrigin: 'top-left', // Web standard Top-Left (0,0)
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="step-box">
+              <span className="step-number">STEP 2</span>
+              <h3>Structure Page Layout with Flow Stacks</h3>
+              <p>
+                Use <code>addStack()</code> to stack headers, cards, tables, and footers vertically without calculating Y coordinates manually:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 2: Vertical Flow Stacking</div>
+                <pre className="code-snippet-content">
+{`doc.addStack({ x: 40, y: 40, width: 762, gap: 20 }, (stack) => {
+  // Elements placed here stack vertically automatically without manual y calculations!
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="step-box">
+              <span className="step-number">STEP 3</span>
+              <h3>Add Vector Headers, Banners & Cards</h3>
+              <p>
+                Draw background shapes, rounded cards, brand color ribbons, or custom vector geometry:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 3: Geometry & Shapes</div>
+                <pre className="code-snippet-content">
+{`stack.addShape({
+  shapeType: 'rectangle',
+  height: 60,
+  fillColor: '#0f172a',
+  borderRadius: 8,
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="step-box">
+              <span className="step-number">STEP 4</span>
+              <h3>Format Typography & Multiline Text</h3>
+              <p>
+                Control font sizes, weights, line heights, letter spacing, alignment, and theme colors:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 4: Typography & Headers</div>
+                <pre className="code-snippet-content">
+{`stack.addText({
+  text: 'OFFICIAL PURCHASE ORDER',
+  fontSize: 22,
+  fontWeight: 'bold',
+  color: '#ffffff',
+  align: 'left',
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="step-box">
+              <span className="step-number">STEP 5</span>
+              <h3>Embed Itemized Data Tables</h3>
+              <p>
+                Add data tables with proportional column widths (<code>'3fr'</code>), zebra striping, and automatic word wrapping:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 5: Proportional Auto-Wrapping Tables</div>
+                <pre className="code-snippet-content">
+{`stack.addTable({
+  columns: [
+    { header: 'Item Specs', width: '3fr', align: 'left' },
+    { header: 'Qty', width: 60, align: 'center' },
+    { header: 'Unit Price', width: 90, align: 'right' },
+  ],
+  rows: lineItems,
+  zebra: true,
+});`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="step-box">
+              <span className="step-number">STEP 6</span>
+              <h3>Export Vector PDF or Render 60 FPS Canvas</h3>
+              <p>
+                Render directly to real vector PDF bytes in Node.js / edge runtimes, or mount inside interactive HTML5 Canvas with native text selection:
+              </p>
+              <div className="code-snippet-box">
+                <div className="code-snippet-header">Step 6: Dual Compilation Target</div>
+                <pre className="code-snippet-content">
+{`// 1. Node.js / Serverless Export:
+const pdfBytes = await PdfRenderer.renderToBytes(doc.toDefinition());
+
+// 2. React UI Interactive Live Preview with Native Text Selection:
+<DocumentViewer document={doc} enableTextSelection={true} />`}
+                </pre>
+              </div>
+            </div>
+          </section>
+
+          {/* Primitive Element Specs */}
+          <section id="primitives-cheatsheet" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Primitive Element Specifications</h2>
+              <span className="docs-meta-tag">Primitives Reference</span>
+            </div>
+            <p>
+              doc-engine documents are composed from 7 layout primitives. Each primitive can be declared
+              via the imperative builder API (<code>doc.add*</code> / <code>stack.add*</code>) or declarative React JSX components:
+            </p>
+
+            <div className="table-wrapper">
+              <table className="doc-table">
+                <thead>
+                  <tr>
+                    <th>Primitive</th>
+                    <th>Method / JSX Tag</th>
+                    <th>Key Properties</th>
+                    <th>Use Cases</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Text</strong></td>
+                    <td><code>stack.addText()</code> / <code>&lt;Text&gt;</code></td>
+                    <td><code>text</code>, <code>fontSize</code>, <code>fontWeight</code>, <code>align</code>, <code>color</code>, <code>lineHeight</code>, <code>maxLines</code></td>
+                    <td>Titles, body paragraphs, callout numbers, currency figures.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Stack</strong></td>
+                    <td><code>doc.addStack()</code></td>
+                    <td><code>direction</code> ('column' | 'row'), <code>gap</code>, <code>x</code>, <code>y</code>, <code>width</code></td>
+                    <td>Auto-calculating vertical or horizontal flow stacks without manual Y math.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Table</strong></td>
+                    <td><code>stack.addTable()</code> / <code>&lt;Table&gt;</code></td>
+                    <td><code>columns</code> (TableColumnConfig[]), <code>rows</code>, <code>zebra</code>, <code>cellPadding</code>, <code>borderWidth</code></td>
+                    <td>Itemized invoices, financial tables, expense logs, schedule manifests.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>View</strong></td>
+                    <td><code>stack.addView()</code> / <code>&lt;View&gt;</code></td>
+                    <td><code>backgroundColor</code>, <code>borderColor</code>, <code>borderRadius</code>, <code>padding</code>, <code>layout</code></td>
+                    <td>Card containers, colored header banners, sidebars, badge boxes.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Grid</strong></td>
+                    <td><code>stack.addGrid()</code> / <code>&lt;Grid&gt;</code></td>
+                    <td><code>columns</code> (number), <code>gap</code>, <code>children</code></td>
+                    <td>2D KPI metric cards, product photo grids, 2-column resume sections.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Shape</strong></td>
+                    <td><code>stack.addShape()</code> / <code>&lt;Shape&gt;</code></td>
+                    <td><code>shapeType</code> ('rectangle' | 'circle' | 'line' | 'path'), <code>fillColor</code>, <code>strokeColor</code></td>
+                    <td>Divider lines, circular avatars, background ribbons, custom vector icons.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Image</strong></td>
+                    <td><code>stack.addImage()</code> / <code>&lt;Image&gt;</code></td>
+                    <td><code>src</code> (URL | Uint8Array), <code>fit</code> ('contain' | 'cover' | 'fill'), <code>borderRadius</code></td>
+                    <td>Company logos, user profile photos, product thumbnails, seals.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           {/* 1. Introduction */}
           <section id="introduction" className="docs-section">
             <div className="docs-section-header">

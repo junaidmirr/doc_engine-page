@@ -29,8 +29,27 @@ npm install @worklabs05/doc-engine pdf-lib
 - `<DocumentViewer document={doc} enableTextSelection={true} />`: React canvas viewer with text selection.
 - `usePDF(doc)`: React hook returning `{ dataUrl, pdfBytes, loading, error, download }`.
 
+## Build Any Custom Document (6-Step Blueprint)
+1. **Initialize Page Canvas & Dimensions**: `createDocument({ defaultPageSize: 'a4', orientation: 'landscape', coordinateOrigin: 'top-left' })`
+2. **Structure Page Layout with Flow Stacks**: `doc.addStack({ x: 40, y: 40, width: 762, gap: 20 }, (stack) => { ... })`
+3. **Add Vector Headers, Banners & Cards**: `stack.addShape({ shapeType: 'rectangle', height: 60, fillColor: '#0f172a', borderRadius: 8 })`
+4. **Format Typography & Multiline Text**: `stack.addText({ text: '...', fontSize: 22, fontWeight: 'bold', color: '#ffffff' })`
+5. **Embed Itemized Data Tables**: `stack.addTable({ columns: [{ header: 'Specs', width: '3fr', align: 'left' }, { header: 'Qty', width: 60 }], rows, zebra: true })`
+6. **Export Vector PDF or Render 60 FPS Canvas**: `PdfRenderer.renderToBytes(doc.toDefinition())` or `<DocumentViewer document={doc} enableTextSelection={true} />`
+
+## Primitive Elements Specs
+- **Text**: `stack.addText()` / `<Text>` — fontSize, fontWeight, align, color, lineHeight, maxLines
+- **Stack**: `doc.addStack()` — direction ('column'|'row'), gap, x, y, width
+- **Table**: `stack.addTable()` / `<Table>` — columns (TableColumnConfig[]), rows, zebra, cellPadding
+- **View**: `stack.addView()` / `<View>` — backgroundColor, borderColor, borderRadius, padding, layout
+- **Grid**: `stack.addGrid()` / `<Grid>` — columns, gap, children (KPI cards, product grids)
+- **Shape**: `stack.addShape()` / `<Shape>` — shapeType ('rectangle'|'circle'|'line'), fillColor, strokeColor
+- **Image**: `stack.addImage()` / `<Image>` — src (URL|Uint8Array), fit ('contain'|'cover'), borderRadius
+
 ## Complete Documentation & AI Context
 - Full Documentation Markdown: /llms-full.txt
 - Model Context Protocol (MCP) Manifest: /mcp.json
 - Well-Known MCP Endpoint: /.well-known/mcp.json
 - Browser AI Agent Bridge: window.__DOC_ENGINE_MCP__
+- MCP Tool: `doc_engine_get_custom_doc_guide` (Returns runnable 6-step blueprint)
+- MCP Tool: `doc_engine_get_primitive_specs` (Returns full primitives specs)

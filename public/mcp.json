@@ -94,6 +94,22 @@
         },
         "required": ["templateName"]
       }
+    },
+    {
+      "name": "doc_engine_get_custom_doc_guide",
+      "description": "Get the complete 6-step blueprint to build any custom document design end-to-end with page setup, flow stacks, vector cards, typography, tables, and renderers.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "doc_engine_get_primitive_specs",
+      "description": "Get complete primitive element specifications (Text, Stack, Table, View, Grid, Shape, Image) with properties, signatures, and use cases.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
     }
   ],
   "resources": [

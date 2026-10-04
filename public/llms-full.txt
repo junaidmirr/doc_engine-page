@@ -12,6 +12,82 @@ doc-engine is an open-source, client-side vector document compiler written in 10
 
 ---
 
+## 0. Build Any Custom Document (End-to-End Guide)
+doc-engine provides 100% design freedom. It acts as an open layout canvas where you can build any document type — from multi-page corporate financial reports to landscape certificates, shipping labels, and AI-generated PDFs.
+
+### 6-Step Blueprint to Design Any Document
+1. **Initialize Page Canvas & Dimensions**: Choose preset page sizes (`'letter'`, `'a4'`, `'legal'`, `'a3'`) or specify custom point dimensions (`{ width: 400, height: 600 }`) and orientation (`'portrait'` or `'landscape'`).
+```typescript
+const doc = createDocument({
+  defaultPageSize: 'a4',
+  orientation: 'landscape',
+  coordinateOrigin: 'top-left', // Web standard (0,0) at top-left
+});
+```
+
+2. **Structure Page Layout with Flow Stacks**: Use `addStack()` to stack content vertically without calculating Y coordinates manually:
+```typescript
+doc.addStack({ x: 40, y: 40, width: 762, gap: 20 }, (stack) => {
+  // Elements placed here stack vertically automatically!
+});
+```
+
+3. **Add Vector Headers, Banners & Cards**: Draw background shapes, rounded cards, brand color ribbons, or custom geometry:
+```typescript
+stack.addShape({
+  shapeType: 'rectangle',
+  height: 60,
+  fillColor: '#0f172a',
+  borderRadius: 8,
+});
+```
+
+4. **Format Typography & Multiline Text**: Control font sizes, weights, line heights, letter spacing, alignment, and colors:
+```typescript
+stack.addText({
+  text: 'OFFICIAL PURCHASE ORDER',
+  fontSize: 22,
+  fontWeight: 'bold',
+  color: '#ffffff',
+  align: 'left',
+});
+```
+
+5. **Embed Itemized Data Tables**: Add data tables with fractional column widths (`'3fr'`), zebra striping, and text auto-wrapping:
+```typescript
+stack.addTable({
+  columns: [
+    { header: 'Item Specs', width: '3fr', align: 'left' },
+    { header: 'Qty', width: 60, align: 'center' },
+    { header: 'Unit Price', width: 90, align: 'right' },
+  ],
+  rows: lineItems,
+  zebra: true,
+});
+```
+
+6. **Export Vector PDF or Render 60 FPS Canvas**:
+```typescript
+// Node.js / Edge export:
+const pdfBytes = await PdfRenderer.renderToBytes(doc.toDefinition());
+
+// React UI Live Preview:
+<DocumentViewer document={doc} enableTextSelection={true} />
+```
+
+### Complete Primitive Element Specs
+| Primitive | Method / JSX Tag | Key Properties | Use Cases |
+| :--- | :--- | :--- | :--- |
+| **Text** | `stack.addText()` / `<Text>` | `text`, `fontSize`, `fontWeight`, `align`, `color`, `lineHeight`, `maxLines` | Titles, body paragraphs, callout numbers, currency figures. |
+| **Stack** | `doc.addStack()` | `direction` ('column'\|'row'), `gap`, `x`, `y`, `width` | Auto-calculating vertical or horizontal flow stacks without y math. |
+| **Table** | `stack.addTable()` / `<Table>` | `columns` (TableColumnConfig[]), `rows`, `zebra`, `cellPadding`, `borderWidth` | Itemized invoices, financial tables, expense logs, manifests. |
+| **View** | `stack.addView()` / `<View>` | `backgroundColor`, `borderColor`, `borderRadius`, `padding`, `layout` | Card containers, colored header banners, sidebars, badge boxes. |
+| **Grid** | `stack.addGrid()` / `<Grid>` | `columns` (number), `gap`, `children` | 2D KPI metric cards, product photo grids, 2-column resume sections. |
+| **Shape** | `stack.addShape()` / `<Shape>` | `shapeType` ('rectangle'\|'circle'\|'line'), `fillColor`, `strokeColor` | Divider lines, circular avatars, background ribbons, custom vector icons. |
+| **Image** | `stack.addImage()` / `<Image>` | `src` (URL\|Uint8Array), `fit` ('contain'\|'cover'\|'fill'), `borderRadius` | Company logos, user profile photos, product thumbnails, seals. |
+
+---
+
 ## 1. Flow Stack API (`doc.addStack()`)
 The Flow Stack API provides automatic element stacking without requiring manual calculation of `y` coordinates or line wrapping heights.
 

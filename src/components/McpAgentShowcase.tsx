@@ -18,6 +18,8 @@ export const McpAgentShowcase: React.FC = () => {
   const [toolTopic, setToolTopic] = useState<string>('flow-stack');
   const [toolTemplate, setToolTemplate] = useState<string>('invoice');
   const [toolCategory, setToolCategory] = useState<string>('core');
+  const [toolStep, setToolStep] = useState<string>('all');
+  const [toolPrimitive, setToolPrimitive] = useState<string>('all');
   const [mcpResponse, setMcpResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -42,6 +44,10 @@ export const McpAgentShowcase: React.FC = () => {
       args = { templateName: toolTemplate };
     } else if (selectedTool === 'doc_engine_get_api_ref') {
       args = { category: toolCategory };
+    } else if (selectedTool === 'doc_engine_get_custom_doc_guide') {
+      if (toolStep !== 'all') args = { step: parseInt(toolStep, 10) };
+    } else if (selectedTool === 'doc_engine_get_primitive_specs') {
+      if (toolPrimitive !== 'all') args = { primitive: toolPrimitive };
     }
 
     try {
@@ -210,6 +216,8 @@ window.postMessage({
                 onChange={(e) => setToolSectionId(e.target.value)}
                 className="select-field"
               >
+                <option value="build-your-own">build-your-own (Build Any Document Guide)</option>
+                <option value="primitives-cheatsheet">primitives-cheatsheet (Primitive Element Specs)</option>
                 <option value="flow-stack">flow-stack (Flow Stack API)</option>
                 <option value="tables-grid">tables-grid (Auto-Wrapping Tables)</option>
                 <option value="react-viewer">react-viewer (Canvas & Text Selection)</option>
@@ -268,6 +276,45 @@ window.postMessage({
                 <option value="flow-stack">Flow Stack & Tables (addStack, addTable)</option>
                 <option value="react">React JSX & Hooks (usePDF, DocumentViewer)</option>
                 <option value="renderers">Renderers (PdfRenderer, CanvasRenderer)</option>
+              </select>
+            </div>
+          )}
+
+          {selectedTool === 'doc_engine_get_custom_doc_guide' && (
+            <div className="form-group">
+              <label>Step Filter (Optional)</label>
+              <select
+                value={toolStep}
+                onChange={(e) => setToolStep(e.target.value)}
+                className="select-field"
+              >
+                <option value="all">All Steps (Complete 6-Step Blueprint)</option>
+                <option value="1">Step 1: Canvas Dimensions</option>
+                <option value="2">Step 2: Flow Stacks</option>
+                <option value="3">Step 3: Geometry & Shapes</option>
+                <option value="4">Step 4: Typography & Headers</option>
+                <option value="5">Step 5: Proportional Tables</option>
+                <option value="6">Step 6: PDF / Canvas Compilation</option>
+              </select>
+            </div>
+          )}
+
+          {selectedTool === 'doc_engine_get_primitive_specs' && (
+            <div className="form-group">
+              <label>Primitive Filter (Optional)</label>
+              <select
+                value={toolPrimitive}
+                onChange={(e) => setToolPrimitive(e.target.value)}
+                className="select-field"
+              >
+                <option value="all">All Primitives</option>
+                <option value="Text">Text</option>
+                <option value="Stack">Stack</option>
+                <option value="Table">Table</option>
+                <option value="View">View</option>
+                <option value="Grid">Grid</option>
+                <option value="Shape">Shape</option>
+                <option value="Image">Image</option>
               </select>
             </div>
           )}
