@@ -10,6 +10,7 @@ import {
   BookOpen,
   Sun,
   Moon,
+  Cpu,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { SocialButtons } from './SocialIcons';
@@ -23,7 +24,8 @@ export type TabKey =
   | 'pagination'
   | 'studio'
   | 'renderers'
-  | 'core-engine';
+  | 'core-engine'
+  | 'mcp';
 
 interface NavbarProps {
   activeTab: TabKey;
@@ -42,6 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
     { key: 'studio', label: 'Studio', icon: <Sliders size={13} />, badge: 'Active' },
     { key: 'renderers', label: 'Benchmarks', icon: <Gauge size={13} /> },
     { key: 'core-engine', label: 'Core API', icon: <Terminal size={13} /> },
+    { key: 'mcp', label: 'Web MCP', icon: <Cpu size={13} />, badge: 'Agent' },
   ];
 
   return (
@@ -56,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
           <img src={logoImg} alt="doc-engine" className="brand-logo-img" />
           <div className="brand-title">
             <span>doc-engine</span>
-            <span className="version-pill">v0.1.0</span>
+            <span className="version-pill">v0.2.0</span>
           </div>
           <span className="brand-subtitle">Vector Document Compiler</span>
         </div>

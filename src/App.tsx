@@ -9,6 +9,7 @@ import { PaginationShowcase } from './components/PaginationShowcase';
 import { StudioShowcase } from './components/StudioShowcase';
 import { RendererBenchmarkShowcase } from './components/RendererBenchmarkShowcase';
 import { CoreEngineShowcase } from './components/CoreEngineShowcase';
+import { McpAgentShowcase } from './components/McpAgentShowcase';
 import { SocialButtons } from './components/SocialIcons';
 import logoImg from './assets/logo.png';
 import './App.css';
@@ -40,6 +41,7 @@ export function AppContent() {
         {activeTab === 'studio' && <StudioShowcase />}
         {activeTab === 'renderers' && <RendererBenchmarkShowcase />}
         {activeTab === 'core-engine' && <CoreEngineShowcase />}
+        {activeTab === 'mcp' && <McpAgentShowcase />}
       </main>
 
       {/* Footer */}

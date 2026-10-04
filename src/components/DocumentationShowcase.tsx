@@ -50,11 +50,14 @@ const NAV_CATEGORIES = [
   {
     category: 'Layout & Flow Engine',
     items: [
+      { id: 'flow-stack', label: 'Flow Stack API (addStack)' },
+      { id: 'tables-grid', label: 'Auto-Wrapping Tables' },
       { id: 'containers', label: 'Containers & Views' },
       { id: 'text-flow', label: 'Text Flow & AFM Fonts' },
       { id: 'flexbox', label: 'Flexbox (Row & Column)' },
-      { id: 'tables-grid', label: 'Tables & 2D Grids' },
       { id: 'pagination-flow', label: 'Auto-Pagination & Rules' },
+      { id: 'headers-footers', label: 'Dynamic Headers & Footers' },
+      { id: 'layout-constraints', label: 'Layout & Break Constraints' },
     ],
   },
   {
@@ -62,7 +65,7 @@ const NAV_CATEGORIES = [
     items: [
       { id: 'react-components', label: 'Component Reference' },
       { id: 'react-hooks', label: 'usePDF & useDocument' },
-      { id: 'react-viewer', label: 'DocumentViewer' },
+      { id: 'react-viewer', label: 'DocumentViewer & Text Overlay' },
     ],
   },
   {
@@ -75,10 +78,13 @@ const NAV_CATEGORIES = [
     ],
   },
   {
-    category: 'Reference',
+    category: 'Reference & AI Agent',
     items: [
+      { id: 'web-mcp', label: 'Web MCP & AI Agent Interface' },
+      { id: 'safe-serialization', label: 'P0 Safe Serialization (deepClone)' },
+      { id: 'custom-fonts', label: 'Custom Font Registration' },
       { id: 'comparison-matrix', label: 'Architecture Comparison' },
-      { id: 'core-api-ref', label: 'Core Engine API' },
+      { id: 'core-api-ref', label: 'Core Engine API Reference' },
       { id: 'community-socials', label: 'Community & Socials' },
     ],
   },
@@ -142,7 +148,7 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
         <div className="docs-hero-inner">
           <div className="docs-hero-badge">
             <img src={logoImg} alt="doc-engine" className="docs-hero-logo" />
-            <span>@worklabs05/doc-engine v0.1.0</span>
+            <span>@worklabs05/doc-engine v0.2.0</span>
             <span className="docs-hero-pill">Official Documentation</span>
           </div>
 
@@ -152,8 +158,8 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
 
           <p className="docs-hero-lead">
             Compile declarative React JSX components or serializable JSON AST directly to real, searchable
-            vector PDFs and 60 FPS Canvas previews. Zero Python backend, zero Puppeteer headless browsers,
-            zero DOM raster screenshots.
+            vector PDFs and 60 FPS Canvas previews. Flow Stacks, Auto-Wrapping Tables, Canvas Text Selection,
+            and Web MCP for AI agents. Zero Python backend, zero Puppeteer.
           </p>
 
           <div className="docs-install-box">
@@ -188,6 +194,15 @@ export const DocumentationShowcase: React.FC<DocumentationShowcaseProps> = ({ on
           <div className="docs-workbench-launchers">
             <span className="docs-launchers-label">Interactive Workbench Hub:</span>
             <div className="docs-launchers-row">
+              <button
+                type="button"
+                className="docs-launcher-btn"
+                onClick={() => onNavigate('mcp')}
+              >
+                <Cpu size={13} />
+                Web MCP (AI Agent)
+                <ArrowUpRight size={12} />
+              </button>
               <button
                 type="button"
                 className="docs-launcher-btn"
@@ -650,6 +665,54 @@ export async function POST(req: Request) {
             </div>
           </section>
 
+          {/* Flow Stack API */}
+          <section id="flow-stack" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Flow Stack API (doc.addStack)</h2>
+              <span className="docs-meta-tag">v0.2.0 Flow Engine</span>
+            </div>
+            <p>
+              The Flow Stack API automatically calculates running vertical and horizontal element positions,
+              eliminating manual coordinate calculations (such as <code>curY += elementHeight</code>) and manual line measurement logic.
+              Ideal for variable-length items, commercial invoices, and multi-paragraph reports.
+            </p>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">Flow Stack Example (TypeScript)</div>
+              <pre className="code-snippet-content">
+{`import { createDocument } from '@worklabs05/doc-engine';
+
+const doc = createDocument({ defaultPageSize: 'letter' });
+
+// Stack automatically manages running Y offsets and children spacing!
+doc.addStack({ x: 40, y: 40, width: 532, gap: 16 }, (stack) => {
+  stack.addText({ text: 'INVOICE #INV-2026-001', fontSize: 24, fontWeight: 'bold' });
+
+  // Dynamic multiline address: stack automatically measures height and pushes downstream views down!
+  stack.addText({
+    text: 'Billed To:\\nAcme International Ltd\\n123 Innovation Way, Suite 400',
+    fontSize: 11,
+    lineHeight: 1.4,
+  });
+
+  // Table primitive nested directly inside flow stack
+  stack.addTable({
+    columns: [
+      { header: 'Description', width: '3fr', align: 'left' },
+      { header: 'Qty', width: 50, align: 'center' },
+      { header: 'Unit Price', width: 80, align: 'right' },
+      { header: 'Total', width: 80, align: 'right' },
+    ],
+    rows: [
+      { cells: [{ content: 'Systems Engineering' }, { content: '40' }, { content: '$150.00' }, { content: '$6,000.00' }] },
+    ],
+    zebra: true,
+  });
+});`}
+              </pre>
+            </div>
+          </section>
+
           {/* 6. Layout & Flow Engine */}
           <section id="containers" className="docs-section">
             <div className="docs-section-header">
@@ -783,32 +846,35 @@ export async function POST(req: Request) {
           {/* Tables & Grids */}
           <section id="tables-grid" className="docs-section">
             <div className="docs-section-header">
-              <h2>Itemized Tables & 2D Grids</h2>
-              <span className="docs-meta-tag">Data Tables</span>
+              <h2>Auto-Wrapping Tables & ColumnConfig</h2>
+              <span className="docs-meta-tag">v0.2.0 Data Tables</span>
             </div>
             <p>
-              Tables support fractional column widths (e.g., <code>['3fr', '1fr', '1fr']</code>), automatic zebra
-              shading, header styling, and cell borders.
+              Tables support column configurations with fractional sizing (e.g. <code>'3fr'</code>), exact numeric point widths,
+              percentage widths, auto-generated headers, zebra striping, and cell alignment inheritance.
             </p>
 
             <div className="code-snippet-box">
-              <div className="code-snippet-header">Table Primitive</div>
+              <div className="code-snippet-header">Auto-Wrapping Table Primitive</div>
               <pre className="code-snippet-content">
-{`<Table
-  x={40}
-  y={220}
-  width={532}
-  columns={['3fr', '1fr', '1fr']}
-  headers={['Deliverable Item', 'Quantity', 'Amount']}
-  rows={[
-    ['Enterprise License - 10 Seats', '1', '$15,000.00'],
-    ['Dedicated SLA Support Plan', '12 mos', '$6,000.00'],
-    ['Security Architecture Assessment', '1', '$4,500.00'],
-  ]}
-  zebra={true}
-  headerBackgroundColor="#18181b"
-  headerTextColor="#ffffff"
-/>`}
+{`doc.addTable({
+  x: 40,
+  y: 200,
+  width: 532,
+  columns: [
+    { header: 'Service Description', width: '3fr', align: 'left' },
+    { header: 'Hours', width: 60, align: 'center' },
+    { header: 'Rate', width: 80, align: 'right' },
+    { header: 'Amount', width: 100, align: 'right' },
+  ],
+  rows: [
+    { cells: [{ content: 'Cloud Vector Compiler Integration' }, { content: '40' }, { content: '$150.00' }, { content: '$6,000.00' }] },
+    { cells: [{ content: 'Real-Time Canvas Preview Pipeline' }, { content: '20' }, { content: '$150.00' }, { content: '$3,000.00' }] },
+  ],
+  zebra: true,
+  headerBackgroundColor: '#0f172a',
+  headerTextColor: '#ffffff',
+});`}
               </pre>
             </div>
           </section>
@@ -857,6 +923,85 @@ export async function POST(req: Request) {
                     <td><code>keepWithNext</code></td>
                     <td><code>boolean</code></td>
                     <td>Prevents orphan section headers by ensuring at least one line of trailing content follows on the same sheet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Dynamic Headers & Footers */}
+          <section id="headers-footers" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Dynamic Headers & Footers</h2>
+              <span className="docs-meta-tag">v0.2.0 Flow</span>
+            </div>
+            <p>
+              Declare dynamic running headers and footers per page with access to the current <code>pageNumber</code> and <code>totalPages</code> count:
+            </p>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">Dynamic Running Header / Footer</div>
+              <pre className="code-snippet-content">
+{`doc.setHeader((pageNumber, totalPages) => ({
+  text: \`Confidential Performance Report — Page \${pageNumber} of \${totalPages}\`,
+  fontSize: 8.5,
+  fontFamily: 'Helvetica',
+  color: '#64748b',
+  align: 'right',
+  margin: { top: 20, right: 40 },
+}));
+
+doc.setFooter((pageNumber, totalPages) => ({
+  text: '© 2026 doc-engine • All Rights Reserved',
+  fontSize: 8,
+  fontFamily: 'Helvetica',
+  color: '#94a3b8',
+  align: 'center',
+  margin: { bottom: 20 },
+}));`}
+              </pre>
+            </div>
+          </section>
+
+          {/* Layout Constraints */}
+          <section id="layout-constraints" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Layout & Break Constraints</h2>
+              <span className="docs-meta-tag">Break Rules</span>
+            </div>
+            <p>
+              Control element splitting across page boundaries with fine-grained constraint properties:
+            </p>
+
+            <div className="table-wrapper">
+              <table className="doc-table">
+                <thead>
+                  <tr>
+                    <th>Constraint</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>keepTogether</code></td>
+                    <td><code>boolean</code></td>
+                    <td>Prevents breaking the view or table across pages. Moves the entire block to next page if it does not fit.</td>
+                  </tr>
+                  <tr>
+                    <td><code>pageBreakBefore</code></td>
+                    <td><code>boolean</code></td>
+                    <td>Forces a fresh page break immediately prior to rendering this element.</td>
+                  </tr>
+                  <tr>
+                    <td><code>pageBreakAfter</code></td>
+                    <td><code>boolean</code></td>
+                    <td>Forces subsequent content onto the following sheet.</td>
+                  </tr>
+                  <tr>
+                    <td><code>minHeight</code></td>
+                    <td><code>number</code></td>
+                    <td>Guarantees minimum allocated vertical height on current page before triggering overflow.</td>
                   </tr>
                 </tbody>
               </table>
@@ -942,6 +1087,32 @@ const { dataUrl, loading, error, download } = usePDF(myDocumentJsx);
 
 // 2. Interactive stateful editor with undo/redo
 const { document, updateElement, addElement, undo, redo, canUndo, canRedo } = useDocument(initialDocDef);`}
+              </pre>
+            </div>
+          </section>
+
+          {/* DocumentViewer & Canvas Text Selection */}
+          <section id="react-viewer" className="docs-section">
+            <div className="docs-section-header">
+              <h2>DocumentViewer & Canvas Text Selection</h2>
+              <span className="docs-meta-tag">v0.2.0 Interactive Canvas</span>
+            </div>
+            <p>
+              The <code>&lt;DocumentViewer&gt;</code> renders an HTML5 Canvas preview at 60 FPS while layering a transparent vector text overlay directly above the canvas. This allows users to highlight, select, and copy text directly off the canvas preview!
+            </p>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">DocumentViewer with Text Selection Overlay</div>
+              <pre className="code-snippet-content">
+{`import { DocumentViewer } from '@worklabs05/doc-engine/react';
+
+<DocumentViewer
+  document={myDocument}
+  initialScale={1.0}
+  showToolbar={true}
+  enableTextSelection={true}
+  onElementClick={(element) => console.log('Clicked element AST:', element)}
+/>`}
               </pre>
             </div>
           </section>
@@ -1106,6 +1277,111 @@ const { document, updateElement, addElement, undo, redo, canUndo, canRedo } = us
             </div>
           </section>
 
+          {/* Web MCP & AI Agent Section */}
+          <section id="web-mcp" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Web MCP & AI Agent Interface</h2>
+              <div className="docs-header-actions-inline">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => onNavigate('mcp')}
+                >
+                  <Cpu size={13} />
+                  Launch Interactive MCP Console
+                </button>
+              </div>
+            </div>
+            <p>
+              doc-engine includes an in-browser <strong>Model Context Protocol (MCP)</strong> server allowing AI coding agents
+              (Claude Desktop, Cursor, Antigravity, Windsurf, or headless automated scripts) to programmatically read documentation,
+              inspect TypeScript API definitions, and generate document AST:
+            </p>
+
+            <div className="docs-features-grid">
+              <div className="docs-card">
+                <div className="docs-card-header">
+                  <Cpu size={15} />
+                  <strong>JSON-RPC 2.0 Web Protocol</strong>
+                </div>
+                <p>Standard Model Context Protocol over window message & browser bridge with tools, resources, and prompt templates.</p>
+              </div>
+
+              <div className="docs-card">
+                <div className="docs-card-header">
+                  <FileCode size={15} />
+                  <strong>Direct AI Endpoints</strong>
+                </div>
+                <p>Access raw machine-readable context at <code>/llms.txt</code>, <code>/llms-full.txt</code>, and <code>/mcp.json</code>.</p>
+              </div>
+
+              <div className="docs-card">
+                <div className="docs-card-header">
+                  <Terminal size={15} />
+                  <strong>JavaScript Window Bridge</strong>
+                </div>
+                <p>Browser agents can query <code>window.__DOC_ENGINE_MCP__.callTool('doc_engine_search_docs', &#123; query &#125;)</code> directly.</p>
+              </div>
+            </div>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">Claude Desktop & Cursor Config (mcpServers.json)</div>
+              <pre className="code-snippet-content">
+{`{
+  "mcpServers": {
+    "doc-engine": {
+      "command": "npx",
+      "args": ["-y", "@worklabs05/doc-engine-mcp"]
+    }
+  }
+}`}
+              </pre>
+            </div>
+          </section>
+
+          {/* P0 Safe Serialization */}
+          <section id="safe-serialization" className="docs-section">
+            <div className="docs-section-header">
+              <h2>P0 Safe Serialization (deepClone)</h2>
+              <span className="docs-meta-tag">AST Integrity</span>
+            </div>
+            <p>
+              <code>deepClone(obj)</code> safely clones arbitrary document AST trees while preserving binary <code>Uint8Array</code> buffers (such as embedded PNG/JPEG images and TTF font tables) and <code>Date</code> objects intact without JSON truncation.
+            </p>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">Safe Cloning with Binary Buffers</div>
+              <pre className="code-snippet-content">
+{`import { deepClone } from '@worklabs05/doc-engine';
+
+const clonedDoc = deepClone(originalDoc);
+// Preserves Uint8Array font buffers and image data without serialization corruption!`}
+              </pre>
+            </div>
+          </section>
+
+          {/* Custom Font Registration */}
+          <section id="custom-fonts" className="docs-section">
+            <div className="docs-section-header">
+              <h2>Custom Font Registration</h2>
+              <span className="docs-meta-tag">TrueType & OpenType</span>
+            </div>
+            <p>
+              Register custom TTF/OTF font buffers on-the-fly or load Google Fonts with 1 line of code:
+            </p>
+
+            <div className="code-snippet-box">
+              <div className="code-snippet-header">Font Registration</div>
+              <pre className="code-snippet-content">
+{`import { createDocument } from '@worklabs05/doc-engine';
+
+const doc = createDocument();
+const fontBuffer = await fetch('/fonts/Inter-Regular.ttf').then(r => r.arrayBuffer());
+doc.registerFont('Inter', new Uint8Array(fontBuffer));`}
+              </pre>
+            </div>
+          </section>
+
           {/* Core Engine API Reference */}
           <section id="core-api-ref" className="docs-section">
             <div className="docs-section-header">
@@ -1128,6 +1404,26 @@ const { document, updateElement, addElement, undo, redo, canUndo, canRedo } = us
                     <td><code>createDocument(options?)</code></td>
                     <td><code>(options?: DocumentOptions) =&gt; DocumentBuilder</code></td>
                     <td>Creates a fluent builder instance for constructing pages and vector elements.</td>
+                  </tr>
+                  <tr>
+                    <td><code>doc.addStack(options, fn)</code></td>
+                    <td><code>(options: StackOptions, fn: (stack: StackBuilder) =&gt; void) =&gt; this</code></td>
+                    <td>Flow stack API for automatic vertical/horizontal stacking without manual Y coordinates.</td>
+                  </tr>
+                  <tr>
+                    <td><code>doc.addTable(options)</code></td>
+                    <td><code>(options: TableOptions) =&gt; this</code></td>
+                    <td>Auto-wrapping table primitive with ColumnConfig, fractional widths ('3fr'), and zebra striping.</td>
+                  </tr>
+                  <tr>
+                    <td><code>doc.registerFont(name, data)</code></td>
+                    <td><code>(name: string, data: Uint8Array) =&gt; this</code></td>
+                    <td>Registers custom TrueType or OpenType font buffer for vector PDF rendering.</td>
+                  </tr>
+                  <tr>
+                    <td><code>deepClone(obj)</code></td>
+                    <td><code>&lt;T&gt;(obj: T) =&gt; T</code></td>
+                    <td>Safe deep clone preserving Uint8Array buffers and Date objects.</td>
                   </tr>
                   <tr>
                     <td><code>DocumentEngine</code></td>

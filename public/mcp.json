@@ -1,0 +1,119 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp-server.json",
+  "name": "doc-engine-web-mcp",
+  "version": "0.2.0",
+  "description": "Model Context Protocol (MCP) server for @worklabs05/doc-engine documentation, API reference, and vector layout code examples.",
+  "protocolVersion": "2024-11-05",
+  "transport": {
+    "type": "web-window",
+    "globalVariable": "__DOC_ENGINE_MCP__",
+    "postMessage": true,
+    "httpStatic": "/llms-full.txt"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": true
+  },
+  "tools": [
+    {
+      "name": "doc_engine_list_sections",
+      "description": "List all available doc-engine documentation sections, guides, and categories.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "doc_engine_get_section",
+      "description": "Retrieve full documentation content and code snippets for a specific section ID.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sectionId": {
+            "type": "string",
+            "description": "Section ID (e.g., 'flow-stack', 'tables-grid', 'react-viewer', 'installation', 'core-api-ref', 'templates')"
+          }
+        },
+        "required": ["sectionId"]
+      }
+    },
+    {
+      "name": "doc_engine_search_docs",
+      "description": "Search across all doc-engine documentation topics, API functions, and layout primitives.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query keyword or phrase"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "doc_engine_get_api_ref",
+      "description": "Get the complete TypeScript API reference for doc-engine classes, functions, and React components.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Optional category filter: 'core', 'react', 'flow-stack', 'renderers'"
+          }
+        }
+      }
+    },
+    {
+      "name": "doc_engine_get_code_example",
+      "description": "Get runnable TypeScript or React JSX code examples for specific layout patterns.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": ["flow-stack", "react-invoice", "auto-table", "pagination", "canvas-viewer", "custom-font", "serverless-nextjs"],
+            "description": "Topic or layout pattern name"
+          }
+        },
+        "required": ["topic"]
+      }
+    },
+    {
+      "name": "doc_engine_get_template",
+      "description": "Get complete document AST definition for standard production templates.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "templateName": {
+            "type": "string",
+            "enum": ["invoice", "certificate", "report", "resume"],
+            "description": "Template key name"
+          }
+        },
+        "required": ["templateName"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "doc-engine://docs/llms.txt",
+      "name": "LLM Summary Documentation",
+      "mimeType": "text/markdown",
+      "description": "Concise overview and index for AI agents"
+    },
+    {
+      "uri": "doc-engine://docs/llms-full.txt",
+      "name": "Full Technical Documentation",
+      "mimeType": "text/markdown",
+      "description": "Complete documentation with all guides and code snippets"
+    },
+    {
+      "uri": "doc-engine://api/reference.json",
+      "name": "Complete API Reference Schema",
+      "mimeType": "application/json",
+      "description": "Machine-readable API reference specification"
+    }
+  ]
+}

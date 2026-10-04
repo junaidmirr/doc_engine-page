@@ -1,0 +1,36 @@
+# doc-engine
+
+> Headless Vector Document & PDF Layout Engine for React & TypeScript (v0.2.0)
+> Open-Source MIT License | npm: @worklabs05/doc-engine | Repository: https://github.com/junaidmirr/doc-engine
+
+doc-engine is a high-performance, client-side vector document compiler. It translates declarative React JSX components or serializable JSON AST into real ISO 32000-1 vector PDFs and interactive 60 FPS HTML5 Canvas previews. It operates without headless browsers (Puppeteer/Playwright), without backend Python microservices, and without raster screenshots.
+
+## Installation
+```bash
+npm install @worklabs05/doc-engine pdf-lib
+# or: pnpm add / yarn add / bun add
+```
+
+## Core Highlights (v0.2.0)
+- **Flow Stack Layout API (`doc.addStack`)**: Automatic running vertical & horizontal element stacking without manual pixel offset tracking.
+- **Auto-Wrapping Tables (`doc.addTable`)**: Fractional column widths ('3fr'), percentage widths, zebra striping, cell alignment inheritance, and automatic header generation.
+- **Canvas Text Selection (`<DocumentViewer enableTextSelection={true}>`)**: 60 FPS HTML5 Canvas preview layered with a transparent vector text overlay for native highlighting and copying.
+- **Real Vector Streams**: 100% searchable text, selectable vectors, crystal clear at 1,000% zoom, median file size ~4 KB / page.
+- **P0 Safe Serialization (`deepClone`)**: Preserves Uint8Array font/image buffers and Date objects across AST mutations.
+- **Custom Font Registration (`doc.registerFont`)**: On-the-fly TTF/OTF font loading and Google Fonts integration.
+
+## Key APIs
+- `createDocument(options)`: Initialize new document AST builder.
+- `doc.addStack(options, callback)`: Create an auto-measuring flow stack container.
+- `doc.addTable(tableOptions)`: Render auto-wrapping vector table with column configurations.
+- `doc.registerFont(name, buffer)`: Register custom TTF/OTF font data.
+- `PdfRenderer.renderToBytes(doc)`: Compile AST to Uint8Array vector PDF stream.
+- `CanvasRenderer.renderPage(canvas, page, options)`: Render page to HTML5 Canvas.
+- `<DocumentViewer document={doc} enableTextSelection={true} />`: React canvas viewer with text selection.
+- `usePDF(doc)`: React hook returning `{ dataUrl, pdfBytes, loading, error, download }`.
+
+## Complete Documentation & AI Context
+- Full Documentation Markdown: /llms-full.txt
+- Model Context Protocol (MCP) Manifest: /mcp.json
+- Well-Known MCP Endpoint: /.well-known/mcp.json
+- Browser AI Agent Bridge: window.__DOC_ENGINE_MCP__

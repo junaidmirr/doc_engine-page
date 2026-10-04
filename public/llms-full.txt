@@ -1,0 +1,161 @@
+# @worklabs05/doc-engine — Complete Technical Documentation (v0.2.0)
+
+## Overview & Architecture
+doc-engine is an open-source, client-side vector document compiler written in 100% pure TypeScript. It compiles declarative React JSX components or serializable JSON AST definitions into real ISO 32000-1 vector PDFs and 60 FPS HTML5 Canvas previews.
+
+### Why doc-engine?
+- Zero Server Dependencies: Runs in any modern browser, Node.js, Cloudflare Workers, Next.js Edge, or Electron.
+- Zero Puppeteer/Chromium: No memory-heavy headless browser processes required.
+- Real Vector Streams: Pure PostScript-style vector paths and font streams instead of pixelated raster screenshots.
+- Ultra Lightweight: Typical generated PDF documents are 4 KB – 15 KB, compared to 5,000 KB+ from browser screenshot tools.
+- Dual Rendering Pipeline: Identical document AST compiles to both 60 FPS Canvas and PDF binary streams.
+
+---
+
+## 1. Flow Stack API (`doc.addStack()`)
+The Flow Stack API provides automatic element stacking without requiring manual calculation of `y` coordinates or line wrapping heights.
+
+```typescript
+import { createDocument } from '@worklabs05/doc-engine';
+
+const doc = createDocument({ defaultPageSize: 'letter' });
+
+doc.addStack({ x: 40, y: 40, width: 532, gap: 16 }, (stack) => {
+  stack.addText({
+    text: 'COMMERCIAL INVOICE',
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#0f172a'
+  });
+
+  // Dynamic multiline text: stack measures text height and pushes subsequent elements down
+  stack.addText({
+    text: 'Billed To:\nAcme Corporation\n742 Evergreen Terrace, Suite 100\nSpringfield, OR',
+    fontSize: 10,
+    lineHeight: 1.4,
+    color: '#475569'
+  });
+
+  // Add auto-wrapping table inside the flow stack
+  stack.addTable({
+    columns: [
+      { header: 'Description', width: '3fr', align: 'left' },
+      { header: 'Qty', width: 60, align: 'center' },
+      { header: 'Unit Price', width: 80, align: 'right' },
+      { header: 'Total', width: 90, align: 'right' },
+    ],
+    rows: [
+      { cells: [{ content: 'Systems Architecture' }, { content: '40' }, { content: '$150.00' }, { content: '$6,000.00' }] },
+      { cells: [{ content: 'Vector Pipeline Implementation' }, { content: '25' }, { content: '$150.00' }, { content: '$3,750.00' }] },
+    ],
+    zebra: true,
+  });
+});
+```
+
+---
+
+## 2. Auto-Wrapping Table Primitive (`doc.addTable()`)
+The table primitive supports:
+- Fractional column sizing (`'1fr'`, `'2fr'`, `'3fr'`)
+- Exact numeric point widths (`width: 80`)
+- Percentage widths (`width: '40%'`)
+- Automatic header generation and styling
+- Cell alignment inheritance (`align: 'left' | 'center' | 'right'`)
+- Alternating zebra striping (`zebra: true`)
+- Custom cell padding and border styling
+
+```typescript
+doc.addTable({
+  x: 40,
+  y: 200,
+  width: 532,
+  columns: [
+    { header: 'Metric', width: '2fr', align: 'left' },
+    { header: 'Q1 Result', width: 100, align: 'right' },
+    { header: 'Q2 Result', width: 100, align: 'right' },
+    { header: 'Variance', width: 80, align: 'right' },
+  ],
+  rows: [
+    { cells: [{ content: 'Annual Recurring Revenue' }, { content: '$12.4M' }, { content: '$15.8M' }, { content: '+27.4%' }] },
+    { cells: [{ content: 'Customer Retention Rate' }, { content: '94.2%' }, { content: '96.8%' }, { content: '+2.6%' }] },
+  ],
+  zebra: true,
+  headerBackgroundColor: '#f1f5f9',
+  headerTextColor: '#0f172a',
+  borderColor: '#e2e8f0',
+});
+```
+
+---
+
+## 3. Declarative React JSX Engine (`@worklabs05/doc-engine/react`)
+Write documents with standard React components.
+
+```tsx
+import { Document, Page, View, Text, Table, Shape, Line, usePDF, DocumentViewer } from '@worklabs05/doc-engine/react';
+
+export function InvoiceDocument({ data }) {
+  const doc = (
+    <Document defaultPageSize="letter" orientation="portrait">
+      <Page backgroundColor="#ffffff" padding={40}>
+        <View layout="flex" flexDirection="column" gap={12}>
+          <Text fontSize={20} fontWeight="bold">{data.companyName}</Text>
+          <Text fontSize={12} color="#64748b">Invoice #{data.invoiceNumber}</Text>
+          <Line x={0} y={0} x2={532} y2={0} strokeColor="#e2e8f0" strokeWidth={1} />
+        </View>
+      </Page>
+    </Document>
+  );
+
+  const { dataUrl, pdfBytes, loading, download } = usePDF(doc);
+
+  return (
+    <div>
+      <button onClick={() => download('invoice.pdf')}>Download PDF</button>
+      <DocumentViewer document={doc} enableTextSelection={true} />
+    </div>
+  );
+}
+```
+
+---
+
+## 4. Canvas Text Selection (`<DocumentViewer enableTextSelection={true}>`)
+The interactive React `DocumentViewer` renders an HTML5 Canvas preview at 60 FPS while layering a transparent vector text overlay directly above the canvas.
+- Native highlighting, selection, and clipboard copying
+- Instant zoom controls (Fit, 50%, 75%, 100%, 125%, 150%)
+- Keyboard pagination and touch support
+
+---
+
+## 5. P0 Safe Serialization (`deepClone()`)
+`deepClone(obj)` safely clones arbitrary document AST trees while preserving:
+- `Uint8Array` binary buffers (such as embedded PNG/JPEG images and TTF fonts)
+- `Date` objects
+- Regex and primitive values without JSON stringify truncation
+
+---
+
+## 6. Custom Font Registration (`doc.registerFont()`)
+```typescript
+import { createDocument } from '@worklabs05/doc-engine';
+
+const doc = createDocument();
+// Pass font buffer from fetch or filesystem
+const fontBuffer = await fetch('/fonts/Inter-Regular.ttf').then(r => r.arrayBuffer());
+doc.registerFont('Inter', new Uint8Array(fontBuffer));
+```
+
+---
+
+## 7. Model Context Protocol (MCP) Web Interface
+doc-engine includes an in-browser Web MCP interface enabling AI agents to programmatically query and inspect documentation:
+
+- Window object: `window.__DOC_ENGINE_MCP__`
+- Tool: `doc_engine_list_sections()`: Returns array of section IDs and labels
+- Tool: `doc_engine_get_section({ sectionId })`: Returns markdown content of any section
+- Tool: `doc_engine_search_docs({ query })`: Searches documentation content
+- Tool: `doc_engine_get_api_ref()`: Returns complete API signatures and types
+- Tool: `doc_engine_get_code_example({ topic })`: Returns runnable code snippets
+- Tool: `doc_engine_get_template({ templateName })`: Returns complete template AST definition

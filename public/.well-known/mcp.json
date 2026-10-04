@@ -1,0 +1,18 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp-server.json",
+  "name": "doc-engine-web-mcp",
+  "version": "0.2.0",
+  "description": "Model Context Protocol (MCP) server for @worklabs05/doc-engine documentation, API reference, and vector layout code examples.",
+  "protocolVersion": "2024-11-05",
+  "transport": {
+    "type": "web-window",
+    "globalVariable": "__DOC_ENGINE_MCP__",
+    "postMessage": true,
+    "httpStatic": "/llms-full.txt"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": true
+  }
+}
